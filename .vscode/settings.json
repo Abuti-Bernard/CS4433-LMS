@@ -1,0 +1,7 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.cmakePath": "C:/Program Files/CMake/bin/cmake.exe",
+    "files.associations": {
+        "*.h": "cpp"
+    }
+}

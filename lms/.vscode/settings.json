@@ -1,0 +1,11 @@
+{
+    "cmake.configureOnOpen": false,
+    "cmake.generator": "Ninja",
+    "cmake.cmakePath": "C:/Program Files/CMake/bin/cmake.exe",
+    "cmake.configureSettings": {
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
+        "OPENSSL_INCLUDE_DIR": "C:/msys64/ucrt64/include",
+        "OPENSSL_SSL_LIBRARY": "C:/msys64/ucrt64/lib/libssl.dll.a",
+        "OPENSSL_CRYPTO_LIBRARY": "C:/msys64/ucrt64/lib/libcrypto.dll.a"
+    }
+}

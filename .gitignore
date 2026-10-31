@@ -1,0 +1,6 @@
+lms/build/
+build/
+cmake-build-*/
+*.db
+*.db-shm
+*.db-wal
