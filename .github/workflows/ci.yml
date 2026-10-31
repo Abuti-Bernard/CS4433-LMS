@@ -1,0 +1,65 @@
+name: LMS CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-quality:
+    name: Build, test and static analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build and analysis dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libsqlite3-dev libssl-dev cppcheck python3-pip
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install code metrics tool
+        run: python -m pip install lizard
+
+      - name: Configure CMake
+        run: cmake -S lms -B lms/build -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build LMS
+        run: cmake --build lms/build --parallel 2
+
+      - name: Run automated end-to-end tests
+        run: ctest --test-dir lms/build --output-on-failure
+
+      - name: Run Cppcheck static analysis
+        run: |
+          cppcheck --version
+          cppcheck --enable=warning,performance,portability \
+            --error-exitcode=1 \
+            --inline-suppr \
+            --suppress=missingIncludeSystem \
+            lms/src
+
+      - name: Generate lines-of-code and complexity report
+        if: always()
+        run: |
+          lizard lms/src -l cpp | tee lms/quality-metrics.txt
+
+      - name: Upload code metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lms-quality-metrics
+          path: lms/quality-metrics.txt
+          if-no-files-found: warn
